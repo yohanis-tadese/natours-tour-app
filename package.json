@@ -1,0 +1,25 @@
+{
+  "name": "natours-tour-and-travel-applications.",
+  "version": "1.0.0",
+  "description": "Develop tour and travel application using nodejs with expressjs framework from scrach to end",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "author": "yohanis tadese",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "eslint": "^9.9.0",
+    "eslint-plugin-node": "^11.1.0",
+    "globals": "^15.9.0"
+  }
+}
