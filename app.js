@@ -1,12 +1,15 @@
 const express = require("express");
 const morgan = require("morgan");
 require("dotenv").config();
-const tourRoutes = require("./routes/tour.routes");
+const tourRoutes = require("./routes/tourRoutes");
 
 const app = express();
 
 //MIDDLEWARE
-if (process.env.NODE_ENV === "development") {
+// if (process.env.NODE_ENV === "development") {
+//   app.use(morgan("dev"));
+// }
+if (process.argv[2] === "hello") {
   app.use(morgan("dev"));
 }
 

@@ -14,7 +14,7 @@ module.exports = [
   },
   {
     rules: {
-      "no-console": "warn", // Warn on console statements
+      "no-console": "off", // Warn on console statements
       semi: ["error", "always"], // Enforce semicolons at the end of statements
       "no-unused-vars": ["warn", { args: "none" }], // Warn about unused variables, but not unused function arguments
       eqeqeq: "error", // Enforce strict equality (=== and !==)

@@ -10,8 +10,8 @@ router
   .get(tourController.getAllTours);
 router
   .route("/:id")
-  .get(tourController.getTours)
-  .patch(tourController.updateTours)
-  .delete(tourController.deleteTours);
+  .get(tourController.getTour)
+  .patch(tourController.updateTour)
+  .delete(tourController.deleteTour);
 
 module.exports = router;
