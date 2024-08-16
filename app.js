@@ -1,9 +1,13 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 require("dotenv").config();
 const tourRoutes = require("./routes/tourRoutes");
 
 const app = express();
+
+// Use CORS middleware
+app.use(cors());
 
 //MIDDLEWARE
 // if (process.env.NODE_ENV === "development") {
