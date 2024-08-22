@@ -50,6 +50,7 @@ const deleteData = async () => {
 
 const command = process.argv[2];
 
+// Use: node dev-data/data/import-dev-data --import and --delete
 if (command === "--import") {
   importData();
 } else if (command === "--delete") {
