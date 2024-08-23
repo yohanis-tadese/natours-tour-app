@@ -15,6 +15,24 @@ const signToken = (id) => {
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
 
+  // Configure cookie options
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+  };
+
+  // Ensure cookie is sent over HTTPS in production
+  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+
+  // Set the JWT as a cookie
+  res.cookie("jwt", token, cookieOptions);
+
+  // Remove sensitive data
+  user.password = undefined;
+
+  // Send response
   res.status(statusCode).json({
     status: "success",
     token,
@@ -24,6 +42,7 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
+// User Signup =========================================
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -33,17 +52,10 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    status: "sucesss",
-    token,
-    data: newUser,
-  });
-
   createSendToken(newUser, 201, res);
 });
 
+// User Login ==========================================
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -63,6 +75,7 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 201, res);
 });
 
+// Protect Routes ======================================
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
@@ -105,6 +118,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+// Restrict Access to Specific Roles =============================
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     // roles ['admin', 'lead-guide']. role='user'
@@ -118,6 +132,7 @@ exports.restrictTo = (...roles) => {
   };
 };
 
+// Forgot Password ===========================================
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
@@ -151,12 +166,14 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      message: "Token sent to email!",
+      message: "Link sent successfully to your email",
     });
   } catch (err) {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
+
+    console.error("Error sending email:", err);
 
     return next(
       new AppError("There was an error sending the email. Try again later!"),
@@ -165,6 +182,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
+// Reset Password ==========================================
 exports.resetPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on the token
   const hashedToken = crypto
@@ -193,9 +211,10 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+// Update Password =============================================
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
-  const user = await User.findById(req.user.id).select("+password");
+  const user = await User.findById(req.user.id);
 
   // 2) Check if POSTed current password is correct
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
