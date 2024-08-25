@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post("/signup", authController.signup);
 router.post("/login", loginAttemptLimiter, authController.login);
-
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);
 
@@ -15,15 +14,13 @@ router.patch("/resetPassword/:token", authController.resetPassword);
 router.use(authController.protect);
 
 router.patch("/updateMyPassword", authController.updatePassword);
+router.get("/getme", userController.getMe, userController.getUser);
 router.patch("/updateMe", userController.updateMe);
 router.delete("/deleteMe", userController.deleteMe);
 
 router.use(authController.restrictTo("admin"));
 
-router
-  .route("/")
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
+router.route("/").get(userController.getAllUsers);
 
 router
   .route("/:id")
