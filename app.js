@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -45,6 +46,8 @@ app.use('/api', limiter);
 
 app.use(express.json());
 
+app.use(cookieParser());
+
 // Data sanitization against NoSQL query injection
 // This middleware removes any dollar signs and dots from the input fields,
 app.use(mongoSanitize());
@@ -78,6 +81,11 @@ app.use('/api/v1/reviews', reviewRoutes);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+});
+
+app.use((req, res, next) => {
+  console.log(req.cookies);
+  next();
 });
 
 app.use(globalErrorHandler);

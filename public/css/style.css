@@ -32,7 +32,7 @@ body {
   font-weight: 300;
   font-family: 'Lato', sans-serif;
   color: #777;
-  padding: 3rem;
+  /* padding: 3rem; */
   min-height: 100vh;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -306,7 +306,7 @@ body {
   z-index: 100;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex;
+  display: fixed;
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
@@ -669,7 +669,7 @@ body {
   margin-right: 1px;
 }
 .reviews__star--active {
-  fill: #55c57a;
+  fill: #f6a000;
 }
 .reviews__star--inactive {
   fill: #bbb;
