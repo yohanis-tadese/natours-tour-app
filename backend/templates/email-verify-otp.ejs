@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Verification</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        font-size: 2em;
+        color: #007bff;
+        text-align: center;
+      }
+      p {
+        font-size: 1em;
+        line-height: 1.6;
+      }
+      .otp-value {
+        font-size: 2em;
+        font-weight: bold;
+        color: #4ec37d;
+        text-align: center;
+        margin: 20px 0;
+      }
+      .footer {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #4ec37d;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p>Hi <%= name %>,</p>
+      <p>
+        Please enter the OTP below for email verification in the Natours app:
+      </p>
+      <h1 class="otp-value"><%= code %></h1>
+
+      <p>If you have already verified your email, please ignore this email!</p>
+
+      <div class="footer">
+        <p>Thank you for using Natours!</p>
+      </div>
+    </div>
+  </body>
+</html>

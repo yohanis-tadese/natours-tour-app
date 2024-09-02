@@ -1,7 +1,7 @@
 const express = require('express');
 const tourController = require('../controllers/tourControllers');
 const reviewRouter = require('../routes/reviewRoutes');
-const authController = require('../controllers/authController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 // const tourRouter = express.Router();
 const router = express.Router();
@@ -13,8 +13,8 @@ router.route('/tour-stats').get(tourController.getTourStats);
 router
   .route('/monthly-plan/:year')
   .get(
-    authController.protect,
-    authController.restrictTo('admin', 'lead-guide', 'guide'),
+    authMiddleware.protect,
+    authMiddleware.restrictTo('admin', 'lead-guide', 'guide'),
     tourController.getMonthlyPlan
   );
 
@@ -28,8 +28,8 @@ router
   .route('/')
   .get(tourController.getAllTours)
   .post(
-    authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authMiddleware.protect,
+    authMiddleware.restrictTo('admin', 'lead-guide'),
     tourController.createTours
   );
 
@@ -37,13 +37,13 @@ router
   .route('/:id')
   .get(tourController.getTour)
   .patch(
-    authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authMiddleware.protect,
+    authMiddleware.restrictTo('admin', 'lead-guide'),
     tourController.updateTour
   )
   .delete(
-    authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authMiddleware.protect,
+    authMiddleware.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour
   );
 

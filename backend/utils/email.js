@@ -1,7 +1,4 @@
 const nodemailer = require('nodemailer');
-const ejs = require('ejs');
-const path = require('path');
-const fs = require('fs');
 
 const sendEmail = async (options) => {
   // 1) Create a transporter
@@ -14,20 +11,12 @@ const sendEmail = async (options) => {
     },
   });
 
-  // 2) Read and compile the email template
-  const templatePath = path.join(
-    __dirname,
-    '../email-templates/passwordResetEmail.ejs'
-  );
-  const template = fs.readFileSync(templatePath, 'utf-8');
-  const html = ejs.render(template, { resetURL: options.resetURL });
-
   // 3) Define the email options
   const mailOptions = {
     from: '<yohanistadese06@gmail.com>',
     to: options.email,
     subject: options.subject,
-    html,
+    html: options.html,
   };
 
   // 4) Actually send the email

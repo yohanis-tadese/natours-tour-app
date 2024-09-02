@@ -12,11 +12,9 @@ require('dotenv').config();
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
-const payimetRoutes = require('./routes/paymentRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
-
-const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
@@ -69,11 +67,10 @@ app.use(
 );
 
 //ROUTES
-app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
-app.use('/api/v1/chapa', payimetRoutes);
+app.use('/api/v1/bookings', bookingRoutes);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
