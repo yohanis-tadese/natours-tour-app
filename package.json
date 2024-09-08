@@ -1,0 +1,51 @@
+{
+  "name": "natours-tour-and-travel-applications.",
+  "version": "1.0.0",
+  "description": "Develop tour and travel application using nodejs with expressjs framework from scrach to end",
+  "main": "server.js",
+  "npm:start": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+  "npm:build": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "author": "yohanis tadese",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.5",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^9.0.2",
+    "leaflet": "^1.9.4",
+    "moment": "^2.30.1",
+    "mongoose": "^8.5.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.14",
+    "nodemon": "^3.1.4",
+    "pug": "^3.0.3",
+    "sharp": "^0.33.5",
+    "slugify": "^1.6.6",
+    "stripe": "^16.9.0",
+    "uuid": "^10.0.0",
+    "validator": "^13.12.0",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "eslint": "^9.9.0",
+    "eslint-plugin-node": "^11.1.0",
+    "globals": "^15.9.0"
+  }
+}
