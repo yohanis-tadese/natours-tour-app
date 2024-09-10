@@ -9,7 +9,6 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
-const viewRoutes = require('./routes/viewRoutes');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
@@ -70,7 +69,6 @@ app.use(
 );
 
 //ROUTES
-app.use('/', viewRoutes);
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/reviews', reviewRoutes);

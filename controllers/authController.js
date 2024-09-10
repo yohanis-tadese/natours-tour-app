@@ -15,11 +15,12 @@ const { createSendToken, isValidRefreshToken } = require('../utils/authUtils');
 
 // **User Signup**
 exports.signup = catchAsync(async (req, res, next) => {
-  const { name, email, password, passwordConfirm } = req.body;
+  const { name, email, role, password, passwordConfirm } = req.body;
 
   const newUser = await User.create({
     name,
     email,
+    role,
     password,
     passwordConfirm,
   });
