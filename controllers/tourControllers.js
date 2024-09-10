@@ -1,7 +1,77 @@
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+const upload = require('../config/multer-config');
 const Tour = require('../models/tourModel');
 const factory = require('./handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const deleteOldImage = require('../utils/deleteOldImage');
+
+// Middleware for handling multiple uploads (1 cover + up to 3 images)
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]);
+
+// Resize tour images using sharp
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) return next();
+
+  // 1. Find the existing tour to get the old image paths
+  const tour = await Tour.findById(req.params.id);
+  if (!tour) return next(new AppError('No tour found with that ID', 404));
+
+  // 2. Delete the old cover image if it exists
+  if (tour.imageCover) {
+    const oldPhotoPath = path.join(
+      __dirname,
+      `../uploads/img/tours/${tour.imageCover}`
+    );
+    if (fs.existsSync(oldPhotoPath)) {
+      deleteOldImage(oldPhotoPath);
+    }
+  }
+
+  // 3. Delete old images if they exist
+  if (tour.images && tour.images.length > 0) {
+    tour.images.forEach((img) => {
+      const oldImagePath = path.join(__dirname, `../uploads/img/tours/${img}`);
+
+      // Check if the file exists before attempting to delete it
+      if (fs.existsSync(oldImagePath)) {
+        deleteOldImage(oldImagePath);
+      }
+    });
+  }
+
+  // 1. Resize the cover image (e.g., 2000x1333)
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`uploads/img/tours/${req.body.imageCover}`);
+
+  // 2. Resize the other images
+  req.body.images = [];
+
+  await Promise.all(
+    req.files.images.map(async (file, i) => {
+      const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+
+      await sharp(file.buffer)
+        .resize(1500, 1000)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`uploads/img/tours/${filename}`);
+
+      req.body.images.push(filename);
+    })
+  );
+
+  next();
+});
 
 exports.createTours = factory.createOne(Tour);
 exports.getAllTours = factory.getAll(Tour);

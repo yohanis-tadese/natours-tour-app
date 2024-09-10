@@ -1,14 +1,32 @@
+const path = require('path');
+const fs = require('fs');
 const sharp = require('sharp');
 const upload = require('../config/multer-config');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
+const deleteOldImage = require('../utils/deleteOldImage');
 
 exports.uploadUserPhoto = upload.single('photo');
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
+
+  // 1. Find the existing user to get the old image path
+  const user = await User.findById(req.user.id);
+  if (!user) return next(new AppError('No user found with that ID', 404));
+
+  // Delete the old photo if it exists
+  if (user.photo) {
+    const oldPhotoPath = path.join(
+      __dirname,
+      `../uploads/img/users/${user.photo}`
+    );
+    if (fs.existsSync(oldPhotoPath)) {
+      deleteOldImage(oldPhotoPath);
+    }
+  }
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
@@ -16,7 +34,7 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
+    .toFile(`uploads/img/users/${req.file.filename}`);
 
   next();
 });
