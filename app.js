@@ -64,7 +64,7 @@ app.use(
 app.all('/', (req, res) => {
   res.status(200).json({
     status: 'success',
-    message: 'Welcome to the API! Feel free to explore our endpoints.',
+    message: 'Welcome to the API! Feel free to explore our endpoints...',
   });
 });
 
