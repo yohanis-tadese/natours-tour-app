@@ -1,4 +1,4 @@
-// const { storage } = require('./cloudinary-config');  // for cloudinary
+// const { storage } = require('./cloudinary-config'); // for cloudinary
 const multer = require('multer');
 const AppError = require('../utils/appError');
 
@@ -13,7 +13,7 @@ const multerFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-  //   storage: storage,
+  // storage: storage,
   storage: multerStorage,
   fileFilter: multerFilter,
 });

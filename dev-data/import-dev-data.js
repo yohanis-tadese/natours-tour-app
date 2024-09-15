@@ -1,24 +1,13 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const Tour = require('./../../models/tourModel');
-const Review = require('./../../models/reviewModel');
-const User = require('./../../models/userModel');
+require('dotenv').config();
+const Tour = require('../models/tourModel');
+const Review = require('../models/reviewModel');
+const User = require('../models/userModel');
 
-dotenv.config({ path: './config.env' });
+const DB = process.env.ATLAS_DATABASE;
 
-const DB = process.env.DATABASE.replace(
-  '<PASSWORD>',
-  process.env.DATABASE_PASSWORD
-);
-
-mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-  })
-  .then(() => console.log('DB connection successful!'));
+mongoose.connect(DB).then(() => console.log('DB connection successful!'));
 
 // READ JSON FILE
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
@@ -52,6 +41,8 @@ const deleteData = async () => {
   }
   process.exit();
 };
+
+// Use: node dev-data/import-dev-data --import and --delete
 
 if (process.argv[2] === '--import') {
   importData();

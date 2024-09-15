@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const app = require('./app');
 require('dotenv').config();
 
-const DB = process.env.DATABASE;
+const DB = process.env.ATLAS_DATABASE;
 
 mongoose
   .connect(DB)
