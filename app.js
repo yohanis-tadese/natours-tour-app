@@ -61,6 +61,14 @@ app.use(
   })
 );
 
+app.all('/api', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Welcome to the API! Feel free to explore our endpoints.',
+  });
+});
+
+
 //ROUTES
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
